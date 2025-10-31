@@ -5,17 +5,16 @@ export const SECTION_ACCENT_COLOR = "#4263eb";
 export const SECTION_BORDER_COLOR = "rgba(66, 99, 235, 0.28)";
 export const SECTION_ICON_BACKGROUND = "rgba(66, 99, 235, 0.12)";
 
-type IconComponent = ComponentType<{ size?: number | string; stroke?: number | string }>;
+type IconComponent = ComponentType<{ size?: number | string; stroke?: number | string; }>;
 
 interface SectionCardProps extends PropsWithChildren {
   title: string;
   description?: string;
   actions?: ReactNode;
   icon?: IconComponent;
-  footer?: ReactNode;
 }
 
-export function SectionCard({ title, description, actions, icon: Icon, footer, children }: SectionCardProps) {
+export function SectionCard({ title, description, actions, icon: Icon, children }: SectionCardProps) {
   return (
     <Card
       className="resume-section-card shadow-sm border-0"
@@ -38,20 +37,20 @@ export function SectionCard({ title, description, actions, icon: Icon, footer, c
             </span>
           ) : null}
           <div className="flex-grow-1">
-            <Card.Title className="h4 mb-1">{title}</Card.Title>
+            <Card.Title className="mb-1">{title}</Card.Title>
             {description ? (
               <Text muted size="sm" className="mb-0">
                 {description}
               </Text>
             ) : null}
+
+
           </div>
           {actions ? <div className="d-flex gap-2 flex-wrap justify-content-end">{actions}</div> : null}
         </div>
       </Card.Header>
       <Card.Body>{children}</Card.Body>
-      {footer ? (
-        <Card.Footer className="bg-transparent border-0 pt-0">{footer}</Card.Footer>
-      ) : null}
     </Card>
   );
 }
+
