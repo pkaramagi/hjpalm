@@ -38,16 +38,17 @@ const sectionComponentMap: Record<SectionKey, SectionRenderer> = {
   remarks: RemarksSection,
 };
 
-const BASE_PATH = "/resume";
-
 export function ResumeSectionPage() {
   const navigate = useNavigate();
-  const { sectionPath } = useParams<{ sectionPath?: string; }>();
+  const { resumeId, sectionPath } = useParams<{ resumeId?: string; sectionPath?: string; }>();
   const sectionKey = mapPathToSection(sectionPath);
-
+  const basePath = resumeId ? `/resume/${resumeId}` : null;
   const { isLoading, isReady, error, reload } = useResume();
-
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
+
+  if (!basePath) {
+    return <Navigate to="/resumes" replace />;
+  }
 
   useEffect(() => {
     if (!saveStatus) {
@@ -58,7 +59,7 @@ export function ResumeSectionPage() {
   }, [saveStatus]);
 
   if (!sectionKey) {
-    return <Navigate to={resolveSectionPath("profile", BASE_PATH)} replace />;
+    return <Navigate to={resolveSectionPath("profile", basePath)} replace />;
   }
 
   if (isLoading && !isReady) {
@@ -90,7 +91,7 @@ export function ResumeSectionPage() {
 
   const currentIndex = SECTION_SEQUENCE.findIndex((section) => section.key === sectionKey);
   if (currentIndex === -1) {
-    return <Navigate to={resolveSectionPath("profile", BASE_PATH)} replace />;
+    return <Navigate to={resolveSectionPath("profile", basePath)} replace />;
   }
   const previousSection = currentIndex > 0 ? SECTION_SEQUENCE[currentIndex - 1] : null;
   const nextSection =
@@ -110,12 +111,12 @@ export function ResumeSectionPage() {
     if (!previousSection) {
       return;
     }
-    navigate(resolveSectionPath(previousSection.key, BASE_PATH));
+    navigate(resolveSectionPath(previousSection.key, basePath));
   };
 
   const handleGoNext = () => {
     if (nextSection) {
-      navigate(resolveSectionPath(nextSection.key, BASE_PATH));
+      navigate(resolveSectionPath(nextSection.key, basePath));
     } else {
       handleSave();
     }
@@ -131,7 +132,7 @@ export function ResumeSectionPage() {
           color="secondary"
           ghost
           type="button"
-          onClick={() => navigate(resolveSectionPath("profile", BASE_PATH))}
+          onClick={() => navigate(resolveSectionPath("profile", basePath))}
         >
           Back to profile
         </Button>
@@ -160,10 +161,10 @@ export function ResumeSectionPage() {
               <div className="btn-list">
                 {previousSection ? (
                   <Button
-                    color="secondary"
+                    color="primary"
                     outline
                     type="button"
-                    onClick={() => navigate(resolveSectionPath(previousSection.key, BASE_PATH))}
+                    onClick={() => navigate(resolveSectionPath(previousSection.key, basePath))}
                   >
                     <IconChevronLeft size={18} className="me-2 rotate-180" />
                     Previous Section
@@ -171,10 +172,10 @@ export function ResumeSectionPage() {
                 ) : null}
                 {nextSection ? (
                   <Button
-                    color="primary"
+                    color="success"
                     outline
 
-                    onClick={() => navigate(resolveSectionPath(nextSection.key, BASE_PATH))}
+                  onClick={() => navigate(resolveSectionPath(nextSection.key, basePath))}
                   >
                     Next section <IconChevronRight size={18} className="ms-2" />
                   </Button>
@@ -191,7 +192,7 @@ export function ResumeSectionPage() {
 
       <div className="page-content">
         <div className="container-xl d-grid gap-3">
-          <ResumeSectionNav currentSection={sectionKey} basePath={BASE_PATH} />
+          <ResumeSectionNav currentSection={sectionKey} basePath={basePath} />
 
           {saveStatus ? (
             <Alert type="success" className="mb-0">
@@ -206,7 +207,7 @@ export function ResumeSectionPage() {
               <Pagination.Link
                 href={
                   previousSection
-                    ? resolveSectionPath(previousSection.key, BASE_PATH)
+                    ? resolveSectionPath(previousSection.key, basePath)
                     : "#"
                 }
                 onClick={(event) => {
@@ -232,7 +233,7 @@ export function ResumeSectionPage() {
             <Pagination.Item className="page-next">
               <Pagination.Link
                 href={
-                  nextSection ? resolveSectionPath(nextSection.key, BASE_PATH) : "#"
+                  nextSection ? resolveSectionPath(nextSection.key, basePath) : "#"
                 }
                 onClick={(event) => {
                   event.preventDefault();
@@ -259,10 +260,3 @@ export function ResumeSectionPage() {
     </>
   );
 }
-
-
-
-
-
-
-

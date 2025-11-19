@@ -1,11 +1,12 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useParams } from "react-router-dom";
 import { ResumeProvider } from "./ResumeContext";
 
 export function ResumeLayout() {
+  const { resumeId } = useParams<{ resumeId?: string; }>();
+
   return (
-    <ResumeProvider>
+    <ResumeProvider recordId={resumeId}>
       <Outlet />
     </ResumeProvider>
   );
 }
-

@@ -1,7 +1,8 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
-import { MainLayout } from '@/layouts/main';
+import { MainHorizontalLayout, MainLayout } from '@/layouts/main';
 import {
+  AccountSettingsPage,
   ChangePasswordPage,
   ForgotPasswordPage,
   LockScreenPage,
@@ -9,11 +10,26 @@ import {
   UserDetailsPage,
 } from '@/features/auth/pages'; // Adjust the path based on your directory structure
 import { ResumeLayout } from '@/features/resume/components/ResumeLayout';
-import { ResumeSectionPage, ResumeViewPage } from '@/features/resume/pages';
+import {
+  ResumeAddPage,
+  ResumeHomePage,
+  ResumeSearchPage,
+  ResumeSectionPage,
+  ResumeViewPage,
+} from '@/features/resume/pages';
+import { UserListPage } from '@/features/admin/pages/UserListPage';
 
 import { HomePage } from '@/pages/home';
+import { useAuth } from '@/features/auth/hooks/useAuth';
 
 export function AppRoutes() {
+  const location = useLocation();
+  const { locked } = useAuth();
+
+  if (locked && location.pathname !== '/auth/lock-screen') {
+    return <Navigate to="/auth/lock-screen" replace />;
+  }
+
   return (
     <Routes>
       <Route
@@ -28,9 +44,46 @@ export function AppRoutes() {
       <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
       <Route path="/auth/lock-screen" element={<LockScreenPage />} />
       <Route path="/auth/change-password" element={<ChangePasswordPage />} />
+      <Route path="/auth/settings" element={<MainLayout><AccountSettingsPage /> </MainLayout>} />
       <Route path="/auth/user-details" element={<UserDetailsPage />} />
       <Route
-        path="/resume"
+        path="/admin"
+        element={<Navigate to="/admin/users" replace />}
+      />
+      <Route
+        path="/admin/users"
+        element={
+          <MainLayout>
+            <UserListPage />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/resumes"
+        element={
+          <MainLayout>
+            <ResumeHomePage />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/resume/search"
+        element={
+          <MainLayout>
+            <ResumeSearchPage />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/resume/add"
+        element={
+          <MainLayout>
+            <ResumeAddPage />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/resume/:resumeId"
         element={
           <MainLayout>
             <ResumeLayout />
@@ -38,10 +91,9 @@ export function AppRoutes() {
         }
       >
         <Route index element={<Navigate to="profile" replace />} />
+        <Route path="view" element={<ResumeViewPage />} />
         <Route path=":sectionPath" element={<ResumeSectionPage />} />
-        <Route path="/resume/view" element={<ResumeViewPage />} />
       </Route>
-
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

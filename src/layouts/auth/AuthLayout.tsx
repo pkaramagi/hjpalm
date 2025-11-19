@@ -1,6 +1,7 @@
+import { ReactSvg } from '@/util/lib/ReactSvg';
 import type { ComponentProps, PropsWithChildren, ReactNode } from 'react';
 
-import { Card, Container, Page, Site } from 'tabler-react-ui';
+import { Card, Container, Page, Site, SiteBrand } from 'tabler-react-ui';
 
 export type ContainerBreakpoint = 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 
@@ -26,34 +27,35 @@ export function AuthLayout({
   cardClassName,
   cardProps = {},
 }: AuthLayoutProps) {
-  const cardClasses = ['card-md', cardClassName].filter(Boolean).join(' ');
+  const cardClasses = [cardClassName].filter(Boolean).join(' ');
 
   return (
-    <Page className="page page-center">
-      <Page.Main>
-        <Container size={"tight"} className="py-4" breakpoint={containerBreakpoint} fluid={fluid}>
-          {logoUrl ? (
-            <div className="text-center mb-4">
-              <Site.Brand
-                href={logoHref}
-                src={logoUrl}
-                alt={logoAlt}
-                className="navbar-brand navbar-brand-autodark"
-              />
-            </div>
-          ) : null}
+    <Page className="page-center">
 
-          {cardProps === null ? (
-            children
-          ) : (
-            <Card className={cardClasses} {...cardProps}>
-              {children}
-            </Card>
-          )}
+      <Container size={"tight"} className="py-4" breakpoint={containerBreakpoint} fluid={fluid}>
+        {logoUrl ? (
+          <div className="text-center mb-4">
+            <SiteBrand
+              svg={<ReactSvg src={logoUrl} />}
+              href={logoHref}
+              alt={logoAlt}
+              className="navbar-brand navbar-brand-autodark auth-logo"
+            />
 
-          {afterCard ? <div className="text-center text-secondary mt-3">{afterCard}</div> : null}
-        </Container>
-      </Page.Main>
+          </div>
+        ) : null}
+
+        {cardProps === null ? (
+          children
+        ) : (
+          <Card className={cardClasses} {...cardProps}>
+            {children}
+          </Card>
+        )}
+
+        {afterCard ? <div className="text-center text-secondary mt-3">{afterCard}</div> : null}
+      </Container>
+
     </Page>
   );
 }

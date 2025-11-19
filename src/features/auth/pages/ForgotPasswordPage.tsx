@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Card, FormTextInput, Text } from 'tabler-react-ui';
-
 import { AuthLayout } from '@/layouts/auth';
 import type { ForgotPasswordFields, ForgotPasswordErrors } from '../types';
 
@@ -9,7 +8,6 @@ const INITIAL_VALUES: ForgotPasswordFields = {
   email: '',
 };
 
-const logoUrl = 'https://preview.tabler.io/static/logo.svg';
 
 export function ForgotPasswordPage() {
   const [values, setValues] = useState<ForgotPasswordFields>(INITIAL_VALUES);
@@ -42,12 +40,12 @@ export function ForgotPasswordPage() {
   };
 
   return (
-    <AuthLayout logoUrl={logoUrl}>
+    <AuthLayout logoUrl={'../../assets/upa logo.svg'}>
       <Card className="card card-md">
         <Card.Body>
           <h2 className="h2 text-center mb-2">Forgot password?</h2>
           <Text muted className="text-center mb-4">
-            No worries � we will send a reset link to the email below.
+            No worries ! we will send a reset link to the email below.
           </Text>
 
           <form className="d-grid gap-3" onSubmit={handleSubmit} autoComplete="off" noValidate>

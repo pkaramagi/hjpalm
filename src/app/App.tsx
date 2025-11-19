@@ -1,12 +1,12 @@
-import { AppProviders } from './providers'
-import { AppRoutes } from './routes'
+import { AppProviders } from './providers';
+import { AppRoutes } from './routes';
 
 export function App() {
   return (
     <AppProviders>
       <AppRoutes />
     </AppProviders>
-  )
+  );
 }
 
-export default App
+export default App;

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Card, FormTextInput, Text } from 'tabler-react-ui';
-
 import { AuthLayout } from '@/layouts/auth';
 import type { ChangePasswordFields, ChangePasswordErrors } from '../types';
 
@@ -11,7 +10,7 @@ const INITIAL_VALUES: ChangePasswordFields = {
   confirmPassword: '',
 };
 
-const logoUrl = 'https://preview.tabler.io/static/logo.svg';
+
 
 export function ChangePasswordPage() {
   const [values, setValues] = useState<ChangePasswordFields>(INITIAL_VALUES);
@@ -61,7 +60,7 @@ export function ChangePasswordPage() {
 
   return (
     <AuthLayout
-      logoUrl={logoUrl}
+      logoUrl={'../../assets/upa logo.svg'}
       afterCard={
         <Text>
           Want to double-check your profile?{' '}

@@ -119,6 +119,7 @@ export interface SpecialRemarkEntry {
 
 export interface ResumeRecord {
   profile: ResumeFormValues;
+  profileEntryId?: string;
   education: EducationHistoryEntry[];
   training: TrainingHistoryEntry[];
   qualifications: QualificationEntry[];
@@ -129,4 +130,3 @@ export interface ResumeRecord {
   discipline: DisciplineEntry[];
   specialRemarks: SpecialRemarkEntry[];
 }
-

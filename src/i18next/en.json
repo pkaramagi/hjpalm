@@ -1,0 +1,50 @@
+{
+  "required": "{{path}} is required",
+  "invalid_type": "{{path}} has invalid type: expected {{expected}}, received {{received}}",
+
+  "string": "{{path}} must be a string",
+  "string_min": "{{path}} must be at least {{min}} characters long",
+  "string_max": "{{path}} must be at most {{max}} characters long",
+  "string_length": "{{path}} must be exactly {{length}} characters long",
+  "string_email": "{{path}} must be a valid e-mail",
+  "string_url": "{{path}} must be a valid URL",
+  "string_uuid": "{{path}} must be a valid UUID",
+  "string_cuid": "{{path}} must be a valid CUID",
+  "string_regex": "{{path}} format is invalid",
+  "string_datetime": "{{path}} must be a valid date/time",
+  "string_ip": "{{path}} must be a valid IP address",
+
+  "number": "{{path}} must be a number",
+  "number_int": "{{path}} must be an integer",
+  "number_min": "{{path}} must be greater than or equal to {{min}}",
+  "number_max": "{{path}} must be less than or equal to {{max}}",
+  "number_multipleOf": "{{path}} must be a multiple of {{multipleOf}}",
+  "number_positive": "{{path}} must be a positive number",
+  "number_negative": "{{path}} must be a negative number",
+  "number_nonnegative": "{{path}} must be zero or a positive number",
+  "number_nonpositive": "{{path}} must be zero or a negative number",
+
+  "boolean": "{{path}} must be true or false",
+
+  "date": "{{path}} must be a valid date",
+  "date_min": "{{path}} must be later than or equal to {{min}}",
+  "date_max": "{{path}} must be earlier than or equal to {{max}}",
+
+  "bigint": "{{path}} must be a bigint",
+
+  "array": "{{path}} must be an array",
+  "array_min": "{{path}} must contain at least {{min}} items",
+  "array_max": "{{path}} must contain at most {{max}} items",
+  "array_length": "{{path}} must contain exactly {{length}} items",
+
+  "object": "{{path}} must be an object",
+  "object_nonstrict": "{{path}} contains unknown keys: {{keys}}",
+
+  "enum": "{{path}} must be one of: {{options}}",
+  "union": "{{path}} does not match any allowed type",
+  "literal": "{{path}} must be exactly '{{expected}}'",
+
+  "nan": "{{path}} cannot be NaN",
+
+  "custom": "{{path}} is invalid"
+}

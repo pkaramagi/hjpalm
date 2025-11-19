@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ResumeRecord } from "../types/resume";
-import { fetchResumeRecord, updateResumeRecord, type ResumeSectionKey, type ResumeSectionPayloadMap } from "../api/resumeApi";
+import { fetchResumeRecord, type ResumeSectionKey, type ResumeSectionPayloadMap } from "../api/resumeApi";
 
 type Status = "idle" | "loading" | "ready" | "error";
 
-const defaultRecordId = "default";
+const defaultRecordId: string | undefined = undefined;
 
 const sectionMap: Record<ResumeSectionKey, keyof ResumeRecord> = {
   profile: 'profile',
@@ -30,13 +30,16 @@ export const useResumeRecord = ({ recordId = defaultRecordId, loadOnMount = true
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<Error | null>(null);
   const [record, setRecord] = useState<ResumeRecord | null>(null);
+  const [resolvedRecordId, setResolvedRecordId] = useState<string | null>(recordId ?? null);
 
   const load = useCallback(async () => {
     setStatus("loading");
     setError(null);
     try {
       const data = await fetchResumeRecord(recordId);
-      setRecord(data);
+      const { recordId: nextRecordId, ...rest } = data;
+      setRecord(rest);
+      setResolvedRecordId(nextRecordId);
       setStatus("ready");
     } catch (err) {
       setError(err instanceof Error ? err : new Error("Failed to load resume"));
@@ -52,41 +55,38 @@ export const useResumeRecord = ({ recordId = defaultRecordId, loadOnMount = true
 
   const updateSection = useCallback(
     async <Section extends ResumeSectionKey>(section: Section, payload: ResumeSectionPayloadMap[Section]) => {
-      if (!recordId) {
+      if (!resolvedRecordId) {
         throw missingRecordError;
       }
-      const patched = await updateResumeRecord(recordId, { [sectionMap[section]]: payload } as Partial<ResumeRecord>);
-
-      setRecord(patched);
-      return patched[sectionMap[section]] as ResumeSectionPayloadMap[Section];
+      setRecord((previous) => {
+        if (!previous) {
+          return previous;
+        }
+        return {
+          ...previous,
+          [sectionMap[section]]: payload,
+        };
+      });
+      return payload;
     },
-    [recordId],
+    [resolvedRecordId],
   );
 
-  const saveAll = useCallback(
-    async (payload: ResumeRecord) => {
-      if (!recordId) {
-        throw missingRecordError;
-      }
-      const patched = await updateResumeRecord(recordId, payload);
-      setRecord(patched);
-      return patched;
-    },
-    [recordId],
-  );
+  const state = useMemo(() => {
+    const hasRecord = Boolean(record);
+    const isLoading = status === "loading" && !hasRecord;
+    const isReady = hasRecord && status !== "error";
 
-  const state = useMemo(
-    () => ({
+    return {
       record,
-      isLoading: status === "loading",
-      isReady: status === "ready" && !!record,
+      recordId: resolvedRecordId,
+      isLoading,
+      isReady,
       error,
       reload: load,
       updateSection,
-      saveAll,
-    }),
-    [error, load, record, saveAll, status, updateSection],
-  );
+    };
+  }, [error, load, record, resolvedRecordId, status, updateSection]);
 
   return state;
 };

@@ -1,98 +1,53 @@
 /**
  * Main layout component that wraps the application content with navigation and footer
- * 
- * @component
- * @param {PropsWithChildren} props - React component props with children
- * @param {React.ReactNode} props.children - Child elements to render within the layout
- * 
- * @example
- * ```tsx
- * <MainLayout>
- *   <div>Page Content</div>
- * </MainLayout>
- * ```
- * 
- * @remarks
- * The layout includes:
- * - Side navigation with configurable links
- * - Company logo
- * - Footer with copyright and customizable links
- * - Responsive sidebar layout
- * 
- * Navigation links can be internal (using React Router) or external URLs.
- * Footer links and site configuration are pulled from SITE_CONFIG constant.
- * 
- * @returns {JSX.Element} Wrapped content with navigation and footer
+ *
+ * The layout includes a sidebar navigation, header, and footer using Tabler components.
  */
-import type { ComponentType, PropsWithChildren } from "react";
+import { useState, type ComponentType, type PropsWithChildren, type ReactNode } from "react";
 import { NavLink as RouterNavLink } from "react-router-dom";
-import { Nav, Site } from "tabler-react-ui";
+import { Avatar, Dropdown, Nav, Site } from "tabler-react-ui";
 import {
-  IconHome,
-  IconIdBadge2,
-  IconLogin,
-  IconLockBolt,
-  IconPasswordUser,
+  IconBooks,
+  IconChecklist,
+  IconEye,
+  IconLock,
+  IconMailOpened,
+  IconSearch,
+  IconSettings,
+  IconUserCircle,
+  IconUserPlus,
+  IconUsersGroup,
 } from "@tabler/icons-react";
 
-import logoUrl from "@/assets/upa logo.svg";
+
 import { SITE_CONFIG } from "@/shared/constants/site";
 import { HeaderLayout } from "./HeaderLayout";
+import { ReactSvg } from "@/util/lib/ReactSvg";
 
-interface SiteLinks {
-  docs: string;
-  github: string;
-  privacy: string;
-  contact: string;
-}
 
-type SidebarIcon = ComponentType<{ size?: number; className?: string; stroke?: number; }>;
 
-type SidebarLink =
-  | { key: string; label: string; to: string; icon: SidebarIcon; }
-  | { key: string; label: string; href: string; external?: boolean; icon: SidebarIcon; };
-
-const sidebarLinks: SidebarLink[] = [
-  { key: "home", label: "Home", to: "/", icon: IconHome },
-  { key: "resume", label: "Resume Builder", to: "/resume/profile", icon: IconIdBadge2 },
-  { key: "sign-in", label: "Sign in", to: "/auth/sign-in", icon: IconLogin },
-  {
-    key: "forgot-password",
-    label: "Forgot password",
-    to: "/auth/forgot-password",
-    icon: IconPasswordUser,
-  },
-  { key: "lock-screen", label: "Lock screen", to: "/auth/lock-screen", icon: IconLockBolt },
-];
-
-const SITE_LINKS = (SITE_CONFIG as { links?: SiteLinks; }).links ?? {
-  docs: "#",
-  github: "#",
-  privacy: "#",
-  contact: "#",
+type DropdownLinkProps = {
+  to: string;
+  children: ReactNode;
+  icon: ComponentType<{ size?: number; className?: string; }>;
 };
 
-const footerLinks = [
-  <a key="docs" href={SITE_LINKS.docs} target="_blank" rel="noreferrer">
-    Product docs
-  </a>,
-  <a key="github" href={SITE_LINKS.github} target="_blank" rel="noreferrer">
-    GitHub
-  </a>,
-  <a key="privacy" href={SITE_LINKS.privacy} target="_blank" rel="noreferrer">
-    Privacy
-  </a>,
-  <a key="contact" href={SITE_LINKS.contact}>
-    Contact
-  </a>,
-];
+function DropdownNavLink({ to, children, icon: Icon }: DropdownLinkProps) {
+
+  return (
+    <RouterNavLink className="dropdown-item d-flex align-items-center gap-2" to={to}>
+      <Icon size={16} />
+      <span>{children}</span>
+    </RouterNavLink>
+  );
+}
 
 const navItems = (
   <Nav>
-    {sidebarLinks.map((item) => (
+    {/* sidebarLinks.map((item) => (
       <Nav.Item key={item.key} link>
-        {'to' in item ? (
-          <Nav.Link as={RouterNavLink} to={item.to} end={item.to === '/'}>
+        {"to" in item ? (
+          <Nav.Link as={RouterNavLink} to={item.to} end={item.to === "/"}>
             <Nav.LinkTitle>
               <span className="d-flex align-items-center gap-2">
                 <item.icon size={18} stroke={1.7} />
@@ -103,8 +58,8 @@ const navItems = (
         ) : (
           <Nav.Link
             href={item.href}
-            target={item.external ? '_blank' : undefined}
-            rel={item.external ? 'noreferrer' : undefined}
+            target={item.external ? "_blank" : undefined}
+            rel={item.external ? "noreferrer" : undefined}
           >
             <Nav.LinkTitle>
               <span className="d-flex align-items-center gap-2">
@@ -115,21 +70,79 @@ const navItems = (
           </Nav.Link>
         )}
       </Nav.Item>
-    ))}
+    )) */}
+    <Dropdown
+      isNavLink
+      triggerContent={
+        <span className="d-inline-flex align-items-center gap-2">
+          <IconBooks size={18} />
+          <span>Resumes</span>
+        </span>
+      }
+      arrow
+    >
+      <Dropdown.Menu static>
+        <DropdownNavLink to="/resume/add" icon={IconBooks}>
+          My Resumes
+        </DropdownNavLink>
+        <DropdownNavLink to="/resume/search" icon={IconSearch}>
+          Search
+        </DropdownNavLink>
+      </Dropdown.Menu>
+    </Dropdown>
+    <Dropdown
+      isNavLink
+      triggerContent={
+        <span className="d-inline-flex align-items-center gap-2">
+          <IconUserCircle size={18} />
+          <span>Auth</span>
+        </span>
+      }
+      arrow
+    >
+      <Dropdown.Menu static>
+        <DropdownNavLink to="/auth/sign-in" icon={IconUserCircle}>
+          Sign in
+        </DropdownNavLink>
+        <DropdownNavLink to="/auth/forgot-password" icon={IconMailOpened}>
+          Forgot password
+        </DropdownNavLink>
+        <DropdownNavLink to="/auth/settings" icon={IconSettings}>
+          Settings
+        </DropdownNavLink>
+        <DropdownNavLink to="/auth/lock-screen" icon={IconLock}>
+          Lock screen
+        </DropdownNavLink>
+      </Dropdown.Menu>
+    </Dropdown>
+    <Nav.Item linkAs={RouterNavLink} to="/admin/users">
+
+      <Nav.LinkTitle>
+        <span className="d-flex align-items-center gap-2">
+          <IconUsersGroup size={18} stroke={1.7} />
+          <span>Admin</span>
+        </span>
+      </Nav.LinkTitle>
+
+    </Nav.Item>
+
   </Nav>
 );
 
 export function MainLayout({ children }: PropsWithChildren) {
   const year = new Date().getFullYear();
+  const [navCollapsed, setNavCollapsed] = useState(true);
+
 
   return (
     <Site.Wrapper
-      header={<HeaderLayout />}
+      defaultNavCollapsed
+      navCollapsed={navCollapsed}                 // omit these two lines for uncontrolled mode
+      onNavCollapsedChange={setNavCollapsed}
+      header={<HeaderLayout fluid className="d-none d-lg-flex d-print-none" />}
       nav={
         <Site.Nav
           className="d-print-none"
-          collapse
-          logoURL={logoUrl}
           alt={`${SITE_CONFIG.name} logo`}
           items={navItems}
         />
@@ -139,27 +152,69 @@ export function MainLayout({ children }: PropsWithChildren) {
       preset="sidebar"
 
       asideProps={{
-        className: 'd-print-none',
-        theme: 'dark', brand: <>
+        className: "d-print-none",
+        theme: "dark",
+        brand: (
           <div className="navbar-brand navbar-brand-autodark">
             <a href="." aria-label="Tabler">
-              <img src={logoUrl} height={70} alt="Tabler" className='navbar-brand-image' />
+
+              <ReactSvg src="../../assets/upa logo.svg" className="navbar-brand-image" height={70} />
             </a>
           </div>
-        </>
+        ),
+
+        mobileHeaderSlot: (
+
+          < Dropdown
+            isNavLink
+            triggerContent={
+              <>
+                <Avatar
+                  size="sm"
+                  src="https://preview.tabler.io/static/avatars/000m.jpg"
+                  className="me-2"
+                />
+                <div className="d-none d-xl-block text-start">
+                  <div className="fw-medium">Paw, Kuna</div>
+                  <div className="text-secondary small">SunMoon UPA 1기</div>
+                </div>
+              </>
+            }
+            size="lg"
+            columns
+            columnCount={3}
+            arrow
+          >
+            <Dropdown.Menu static className="dropdown-menu-end">
+              <Dropdown.Item href="./profile.html">Profile</Dropdown.Item>
+              <Dropdown.Item href="./settings.html">Settings</Dropdown.Item>
+              <Dropdown.Item href="./sign-in.html">Logout</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        )
       }}
-      footerPlacement="outside"
+
+      footerProps={
+        {
+          className: "d-print-none"
+        }
+      }
 
       footer={
         <Site.Footer
-
-          copyright={<span>Copyright {year} {SITE_CONFIG.company}</span>}
+          copyright={
+            <span>
+              Copyright {year} {SITE_CONFIG.company}
+            </span>
+          }
         />
       }
 
-      contentContainer="xl"
     >
+
       {children}
+
+
     </Site.Wrapper>
   );
 }

@@ -7,6 +7,7 @@ import type { ResumeSectionKey, ResumeSectionPayloadMap } from "../api/resumeApi
 
 interface ResumeContextValue {
   record: ResumeRecord | null;
+  recordId: string | null;
   isLoading: boolean;
   isReady: boolean;
   error: Error | null;
@@ -16,19 +17,22 @@ interface ResumeContextValue {
 
 const ResumeContext = createContext<ResumeContextValue | undefined>(undefined);
 
-export function ResumeProvider({ children }: PropsWithChildren) {
-  const { record, isLoading, isReady, error, reload, updateSection } = useResumeRecord();
+type ResumeProviderProps = PropsWithChildren<{ recordId?: string; }>;
+
+export function ResumeProvider({ children, recordId }: ResumeProviderProps) {
+  const { record, recordId: resolvedRecordId, isLoading, isReady, error, reload, updateSection } = useResumeRecord({ recordId });
 
   const value = useMemo(
     () => ({
       record,
+      recordId: resolvedRecordId,
       isLoading,
       isReady,
       error,
       reload,
       updateSection,
     }),
-    [record, isLoading, isReady, error, reload, updateSection],
+    [record, resolvedRecordId, isLoading, isReady, error, reload, updateSection],
   );
 
   return <ResumeContext.Provider value={value}>{children}</ResumeContext.Provider>;

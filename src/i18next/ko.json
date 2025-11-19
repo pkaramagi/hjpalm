@@ -1,0 +1,50 @@
+{
+  "required": "{{path}} 필드는 필수입니다",
+  "invalid_type": "{{path}} 유형이 올바르지 않습니다: {{expected}}(이)가 필요하지만 {{received}}(을)를 받았습니다",
+
+  "string": "{{path}} 필드는 문자열이어야 합니다",
+  "string_min": "{{path}} 필드는 최소 {{min}}자 이상이어야 합니다",
+  "string_max": "{{path}} 필드는 최대 {{max}}자 이하여야 합니다",
+  "string_length": "{{path}} 필드는 정확히 {{length}}자여야 합니다",
+  "string_email": "{{path}} 필드는 올바른 이메일 주소여야 합니다",
+  "string_url": "{{path}} 필드는 올바른 URL이어야 합니다",
+  "string_uuid": "{{path}} 필드는 올바른 UUID여야 합니다",
+  "string_cuid": "{{path}} 필드는 올바른 CUID여야 합니다",
+  "string_regex": "{{path}} 필드 형식이 올바르지 않습니다",
+  "string_datetime": "{{path}} 필드는 올바른 날짜/시간 형식이어야 합니다",
+  "string_ip": "{{path}} 필드는 올바른 IP 주소여야 합니다",
+
+  "number": "{{path}} 필드는 숫자여야 합니다",
+  "number_int": "{{path}} 필드는 정수여야 합니다",
+  "number_min": "{{path}} 필드는 {{min}} 이상이어야 합니다",
+  "number_max": "{{path}} 필드는 {{max}} 이하여야 합니다",
+  "number_multipleOf": "{{path}} 필드는 {{multipleOf}}의 배수여야 합니다",
+  "number_positive": "{{path}} 필드는 양수여야 합니다",
+  "number_negative": "{{path}} 필드는 음수여야 합니다",
+  "number_nonnegative": "{{path}} 필드는 0 또는 양수여야 합니다",
+  "number_nonpositive": "{{path}} 필드는 0 또는 음수여야 합니다",
+
+  "boolean": "{{path}} 필드는 true 또는 false여야 합니다",
+
+  "date": "{{path}} 필드는 올바른 날짜여야 합니다",
+  "date_min": "{{path}} 필드는 {{min}} 이후여야 합니다",
+  "date_max": "{{path}} 필드는 {{max}} 이전이어야 합니다",
+
+  "bigint": "{{path}} 필드는 BigInt여야 합니다",
+
+  "array": "{{path}} 필드는 배열이어야 합니다",
+  "array_min": "{{path}} 필드는 최소 {{min}}개 이상의 항목을 포함해야 합니다",
+  "array_max": "{{path}} 필드는 최대 {{max}}개 이하의 항목을 포함해야 합니다",
+  "array_length": "{{path}} 필드는 정확히 {{length}}개의 항목을 포함해야 합니다",
+
+  "object": "{{path}} 필드는 객체여야 합니다",
+  "object_nonstrict": "{{path}} 필드에 알 수 없는 키가 포함되어 있습니다: {{keys}}",
+
+  "enum": "{{path}} 필드는 다음 중 하나여야 합니다: {{options}}",
+  "union": "{{path}} 필드는 허용된 타입 중 어떤 것도 충족하지 않습니다",
+  "literal": "{{path}} 필드는 '{{expected}}'와 정확히 일치해야 합니다",
+
+  "nan": "{{path}} 필드는 NaN일 수 없습니다",
+
+  "custom": "{{path}} 필드가 유효하지 않습니다"
+}
