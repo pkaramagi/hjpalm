@@ -3,19 +3,16 @@
  *
  * The layout includes a sidebar navigation, header, and footer using Tabler components.
  */
-import { useState, type ComponentType, type PropsWithChildren, type ReactNode } from "react";
+import { useState, type PropsWithChildren } from "react";
 import { NavLink as RouterNavLink } from "react-router-dom";
 import { Avatar, Dropdown, Nav, Site } from "tabler-react-ui";
 import {
   IconBooks,
-  IconChecklist,
-  IconEye,
   IconLock,
   IconMailOpened,
   IconSearch,
   IconSettings,
   IconUserCircle,
-  IconUserPlus,
   IconUsersGroup,
 } from "@tabler/icons-react";
 
@@ -23,24 +20,12 @@ import {
 import { SITE_CONFIG } from "@/shared/constants/site";
 import { HeaderLayout } from "./HeaderLayout";
 import { ReactSvg } from "@/util/lib/ReactSvg";
+import { DropdownNavLink } from "./components/DropdownNavLink";
+import { useAuth } from "@/features/auth/hooks/useAuth";
 
 
 
-type DropdownLinkProps = {
-  to: string;
-  children: ReactNode;
-  icon: ComponentType<{ size?: number; className?: string; }>;
-};
 
-function DropdownNavLink({ to, children, icon: Icon }: DropdownLinkProps) {
-
-  return (
-    <RouterNavLink className="dropdown-item d-flex align-items-center gap-2" to={to}>
-      <Icon size={16} />
-      <span>{children}</span>
-    </RouterNavLink>
-  );
-}
 
 const navItems = (
   <Nav>
@@ -132,8 +117,7 @@ const navItems = (
 export function MainLayout({ children }: PropsWithChildren) {
   const year = new Date().getFullYear();
   const [navCollapsed, setNavCollapsed] = useState(true);
-
-
+  const { user } = useAuth();
   return (
     <Site.Wrapper
       defaultNavCollapsed
@@ -171,12 +155,12 @@ export function MainLayout({ children }: PropsWithChildren) {
               <>
                 <Avatar
                   size="sm"
-                  src="https://preview.tabler.io/static/avatars/000m.jpg"
+                  imageURL="https://preview.tabler.io/static/avatars/000m.jpg"
                   className="me-2"
                 />
                 <div className="d-none d-xl-block text-start">
-                  <div className="fw-medium">Paw, Kuna</div>
-                  <div className="text-secondary small">SunMoon UPA 1기</div>
+                  <div className="fw-medium">{user?.name}</div>
+                  <div className="text-secondary small">{user?.email}</div>
                 </div>
               </>
             }

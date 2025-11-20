@@ -1,9 +1,8 @@
-import { useMemo, type ComponentProps } from "react";
+import { type ComponentProps } from "react";
 import {
   Nav,
   NavItem,
   Dropdown,
-  Avatar,
   Badge,
   Button,
   Card,
@@ -11,8 +10,6 @@ import {
   Site,
 } from "tabler-react-ui";
 import {
-  IconMoon,
-  IconSun,
   IconBell,
   IconStar,
   IconStarFilled,
@@ -23,27 +20,12 @@ import {
 } from "@tabler/icons-react";
 import "tabler-react-ui/dist/style.css";
 
-import { useAuth } from "@/features/auth/hooks/useAuth";
+import { ThemeSwitcher } from "./components/ThemeSwitcher";
+import { UserMenuDropdown } from "./components/UserMenuDropdown";
 
 type HeaderLayoutProps = ComponentProps<typeof Site.Header>;
 
 const DefaultHeaderContent = () => {
-  const { logout, lock, user } = useAuth();
-  const displayName = useMemo(() => user?.name ?? user?.email ?? "User account", [user?.email, user?.name]);
-  const displaySubtitle = useMemo(() => user?.email ?? user?.username ?? "Signed in", [user?.email, user?.username]);
-  const initials = useMemo(() => {
-    const source = user?.name ?? user?.email ?? "";
-    if (!source) {
-      return "UP";
-    }
-    return source
-      .trim()
-      .split(" ")
-      .map((segment) => segment[0])
-      .join("")
-      .slice(0, 2)
-      .toUpperCase();
-  }, [user?.email, user?.name]);
 
   return (
     <>
@@ -54,24 +36,7 @@ const DefaultHeaderContent = () => {
         <Nav className="ms-auto align-items-center">
           {/* Theme Switcher */}
           <NavItem className="d-none d-md-flex">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="hide-theme-dark"
-              title="Enable dark mode"
-              onClick={() => (document.documentElement.dataset.bsTheme = "dark")}
-            >
-              <IconMoon size={18} />
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="hide-theme-light"
-              title="Enable light mode"
-              onClick={() => (document.documentElement.dataset.bsTheme = "light")}
-            >
-              <IconSun size={18} />
-            </Button>
+            <ThemeSwitcher />
           </NavItem>
 
           {/* Notifications */}
@@ -188,33 +153,7 @@ const DefaultHeaderContent = () => {
           </Dropdown>
 
           {/* User Menu */}
-          <Dropdown
-            isNavLink
-          triggerContent={
-            <>
-              <Avatar size="sm" className="me-2">
-                {initials}
-              </Avatar>
-              <div className="d-none d-xl-block text-start">
-                <div className="fw-medium">{displayName}</div>
-                <div className="text-secondary small">{displaySubtitle}</div>
-              </div>
-            </>
-          }
-            size="lg"
-            columns
-            columnCount={3}
-            arrow
-          >
-            <Dropdown.Menu static className="dropdown-menu-end">
-              <Dropdown.Item>Status</Dropdown.Item>
-              <Dropdown.Item href="./profile.html">Profile</Dropdown.Item>
-              <Dropdown.Item onClick={() => lock()}>Lock</Dropdown.Item>
-              <Dropdown.ItemDivider />
-              <Dropdown.Item href="./settings.html">Settings</Dropdown.Item>
-              <Dropdown.Item onClick={() => logout()}>Logout</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
+          <UserMenuDropdown />
         </Nav>
       </Nav.Bar>
 
